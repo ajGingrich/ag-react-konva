@@ -4,10 +4,9 @@ import { mount, configure } from 'enzyme';
 import {
   Stage,
   Layer,
-  Rect,
-  Group,
+  Line,
   useStrictMode,
-  Text
+  Text,
 } from '../src/ReactKonva';
 import './mocking';
 import Konva from 'konva';
@@ -23,7 +22,7 @@ describe('Test references', function() {
     render() {
       return (
         <Stage width={300} height={300} ref={node => (this.stage = node)}>
-          <Layer ref={node => (this.layer = node)} />
+          <Line ref={node => (this.layer = node)} />
         </Stage>
       );
     }
@@ -104,7 +103,7 @@ describe('Test stage component', function() {
             onMouseDown={handleEvent}
           >
             <Layer ref={node => (this.layer = node)}>
-              <Rect ref={node => (this.rect = node)} width={100} height={100} />
+              <Line ref={node => (this.rect = node)} width={100} height={100} />
             </Layer>
           </Stage>
         );
@@ -134,7 +133,7 @@ describe('Test stage component', function() {
             onContentMouseDown={handleEvent}
           >
             <Layer ref={node => (this.layer = node)}>
-              <Rect ref={node => (this.rect = node)} width={100} height={100} />
+              <Line ref={node => (this.rect = node)} width={100} height={100} />
             </Layer>
           </Stage>
         );
@@ -180,7 +179,7 @@ describe('Test stage component', function() {
             onMouseDown={null}
           >
             <Layer ref={node => (this.layer = node)}>
-              <Rect ref={node => (this.rect = node)} width={100} height={100} />
+              <Line ref={node => (this.rect = node)} width={100} height={100} />
             </Layer>
           </Stage>
         );
@@ -201,7 +200,7 @@ describe('Test props setting', function() {
       return (
         <Stage ref={node => (this.stage = node)} width={300} height={300}>
           <Layer ref={node => (this.layer = node)}>
-            <Rect ref={node => (this.rect = node)} {...this.props.rectProps} />
+            <Line ref={node => (this.rect = node)} {...this.props.rectProps} />
           </Layer>
         </Stage>
       );
@@ -378,7 +377,7 @@ describe('test lifecycle methods', () => {
       this.props.componentWillUnmount();
     }
     render() {
-      return <Rect />;
+      return <Line />;
     }
   }
   class App extends React.Component {
@@ -519,37 +518,6 @@ describe.skip('Bad structure', () => {
 // that creates mess in id references
 // see: https://github.com/konvajs/react-konva/issues/119
 
-describe.skip('Check id saving', () => {
-  it('Konva can loose ids?', function() {
-    class App extends React.Component {
-      render() {
-        const kids = [
-          <Rect key="1" id="rect1" fill="red" />,
-          <Rect key="2" id="rect2" fill="green" />
-        ];
-        return (
-          <Stage ref={node => (this.stage = node)} width={300} height={300}>
-            <Layer>
-              {this.props.drawAsGroup ? <Group>{kids}</Group> : kids}
-            </Layer>
-          </Stage>
-        );
-      }
-    }
-
-    const wrapper = mount(<App />);
-    const instance = wrapper.instance();
-    const stage = instance.stage.getStage();
-    expect(stage.findOne('#rect1').fill()).to.equal('red');
-    expect(stage.findOne('#rect2').fill()).to.equal('green');
-
-    wrapper.setProps({ drawAsGroup: true });
-
-    expect(stage.findOne('#rect1').fill()).to.equal('red');
-    expect(stage.findOne('#rect2').fill()).to.equal('green');
-  });
-});
-
 describe('Test drawing calls', () => {
   it('Draw layer on mount', function() {
     class App extends React.Component {
@@ -557,7 +525,7 @@ describe('Test drawing calls', () => {
         return (
           <Stage ref={node => (this.stage = node)} width={300} height={300}>
             <Layer>
-              <Rect fill="red" />
+              <Line fill="red" />
             </Layer>
           </Stage>
         );
@@ -577,7 +545,7 @@ describe('Test drawing calls', () => {
       render() {
         return (
           <Stage ref={node => (this.stage = node)} width={300} height={300}>
-            <Layer>{this.props.showRect && <Rect fill="red" />}</Layer>
+            <Layer>{this.props.showRect && <Line fill="red" />}</Layer>
           </Stage>
         );
       }
@@ -596,7 +564,7 @@ describe('Test drawing calls', () => {
       render() {
         return (
           <Stage ref={node => (this.stage = node)} width={300} height={300}>
-            <Layer>{!this.props.hideRect && <Rect fill="red" />}</Layer>
+            <Layer>{!this.props.hideRect && <Line fill="red" />}</Layer>
           </Stage>
         );
       }
@@ -617,8 +585,8 @@ describe('test reconciler', () => {
     class App extends React.Component {
       render() {
         const kids = this.props.drawMany
-          ? [<Rect key="1" name="rect1" />, <Rect key="2" name="rect2" />]
-          : [<Rect key="2" name="rect2" />];
+          ? [<Line key="1" name="rect1" />, <Line key="2" name="rect2" />]
+          : [<Line key="2" name="rect2" />];
         return (
           <Stage ref={node => (this.stage = node)} width={300} height={300}>
             <Layer ref={node => (this.layer = node)}>{kids}</Layer>
@@ -643,11 +611,11 @@ describe('test reconciler', () => {
       render() {
         const kids = this.props.drawMany
           ? [
-              <Rect key="1" name="rect1" />,
-              <Rect key="2" name="rect2" />,
-              <Rect key="3" name="rect3" />
+              <Line key="1" name="rect1" />,
+              <Line key="2" name="rect2" />,
+              <Line key="3" name="rect3" />
             ]
-          : [<Rect key="1" name="rect1" />, <Rect key="3" name="rect3" />];
+          : [<Line key="1" name="rect1" />, <Line key="3" name="rect3" />];
         return (
           <Stage ref={node => (this.stage = node)} width={300} height={300}>
             <Layer ref={node => (this.layer = node)}>{kids}</Layer>
@@ -669,8 +637,8 @@ describe('test reconciler', () => {
     class App extends React.Component {
       render() {
         const kids = this.props.drawMany
-          ? [<Rect key="1" name="rect1" />, <Rect key="2" name="rect2" />]
-          : [<Rect key="1" name="rect1" />];
+          ? [<Line key="1" name="rect1" />, <Line key="2" name="rect2" />]
+          : [<Line key="1" name="rect1" />];
         return (
           <Stage ref={node => (this.stage = node)} width={300} height={300}>
             <Layer ref={node => (this.layer = node)}>{kids}</Layer>
@@ -702,9 +670,9 @@ describe('test reconciler', () => {
     }
 
     let kids = [
-      <Rect key="1" name="rect1" />,
-      <Rect key="2" name="rect2" />,
-      <Rect key="3" name="rect3" />
+      <Line key="1" name="rect1" />,
+      <Line key="2" name="rect2" />,
+      <Line key="3" name="rect3" />
     ];
     const wrapper = mount(<App kids={kids} />);
     const layer = wrapper.instance().layer;
@@ -714,9 +682,9 @@ describe('test reconciler', () => {
     expect(layer.children[2].name()).to.equal('rect3');
 
     kids = [
-      <Rect key="3" name="rect3" />,
-      <Rect key="1" name="rect1" />,
-      <Rect key="2" name="rect2" />
+      <Line key="3" name="rect3" />,
+      <Line key="1" name="rect1" />,
+      <Line key="2" name="rect2" />
     ];
     wrapper.setProps({ kids });
     expect(layer.children[0].name()).to.equal('rect3');
@@ -724,9 +692,9 @@ describe('test reconciler', () => {
     expect(layer.children[2].name()).to.equal('rect2');
 
     kids = [
-      <Rect key="1" name="rect1" />,
-      <Rect key="3" name="rect3" />,
-      <Rect key="2" name="rect2" />
+      <Line key="1" name="rect1" />,
+      <Line key="3" name="rect3" />,
+      <Line key="2" name="rect2" />
     ];
     wrapper.setProps({ kids });
 
@@ -789,7 +757,7 @@ describe('Test nested context API', function() {
     render() {
       return (
         <Layer>
-          <Rect width={50} height={50} fill={this.context.color} />
+          <Line width={50} height={50} fill={this.context.color} />
         </Layer>
       );
     }
@@ -834,7 +802,7 @@ describe('try lazy and suspense', function() {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve({
-          default: () => <Rect />
+          default: () => <Line />
         });
       }, 10);
     });

@@ -8,20 +8,22 @@
 'use strict';
 
 const React = require('react');
-import Konva from 'konva/src/Core'
+// import Konva from 'konva/src/Core'
+import Konva from 'konva'
+// import KonvaStage from 'konva/src/Stage'
 const ReactFiberReconciler = require('react-reconciler');
 const ReactDOMComponentTree = require('./ReactDOMComponentTree');
 const HostConfig = require('./ReactKonvaHostConfig');
 const { applyNodeProps, toggleStrictMode } = require('./makeUpdates');
 
-const REACT_VERSION = '16.6.3';
+console.log(Konva, 'konva')
 
-Konva.Stage.prototype.batchDraw = function() {
-  this.getChildren().each(function(layer) {
-    layer.batchDraw();
-  });
-  return this;
-};
+//from konva Global.js
+const isBrowser = typeof window !== 'undefined'
+  && ({}.toString.call(window) === '[object Window]'
+  || {}.toString.call(window) === '[object global]')
+
+const REACT_VERSION = '16.6.3';
 
 if (React.version !== REACT_VERSION) {
   console.error(
@@ -33,14 +35,16 @@ if (React.version !== REACT_VERSION) {
 
 class Stage extends React.Component {
   componentDidMount() {
-    if (!Konva.isBrowser) {
+    if (!isBrowser) {
       return;
     }
-    this._stage = new Konva.Stage({
+    this._stage = new Konva({
       width: this.props.width,
       height: this.props.height,
       container: this._tagRef
     });
+
+    console.log(this.stage, 'this.stage')
 
     this._setRef(this._stage);
 
@@ -63,7 +67,7 @@ class Stage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!Konva.isBrowser) {
+    if (!isBrowser) {
       return;
     }
     this._setRef(this._stage);
@@ -73,7 +77,7 @@ class Stage extends React.Component {
   }
 
   componentWillUnmount() {
-    if (!Konva.isBrowser) {
+    if (!isBrowser) {
       return;
     }
     this._setRef(null);
@@ -106,6 +110,31 @@ const KONVA_NODES = [
   'Layer',
   'Line',
 ];
+
+// const KONVA_NODES = [
+//   'Layer',
+//   'FastLayer',
+//   'Group',
+//   'Label',
+//   'Rect',
+//   'Circle',
+//   'Ellipse',
+//   'Wedge',
+//   'Line',
+//   'Sprite',
+//   'Image',
+//   'Text',
+//   'TextPath',
+//   'Star',
+//   'Ring',
+//   'Arc',
+//   'Tag',
+//   'Path',
+//   'RegularPolygon',
+//   'Arrow',
+//   'Shape',
+//   'Transformer'
+// ];
 
 const TYPES = {};
 

@@ -90,11 +90,12 @@ For me info see: https://github.com/konvajs/react-konva/issues/194
 
   if (hasUpdates) {
     instance.setAttrs(updatedProps);
-    updatePicture(instance);
+    updatePicture(instance, 'makeupdates');
   }
 }
 
-export function updatePicture(node) {
+export function updatePicture(node, origin) {
+  console.log(origin, 'origin')
   var drawingNode = node.getLayer() || node.getStage();
   drawingNode && drawingNode.batchDraw();
 }

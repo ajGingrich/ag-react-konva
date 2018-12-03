@@ -1,15 +1,15 @@
 {
   "license": "MIT",
-  "name": "react-konva",
+  "name": "ag-react-konva",
   "description": "React binding to canvas element via Konva framework",
-  "version": "16.6.31",
+  "version": "16.6.35",
   "keywords": [
     "react",
     "canvas",
     "jsx",
     "konva"
   ],
-  "bugs": "https://github.com/konvajs/react-konva/issues",
+  "bugs": "https://github.com/konvajs/ag-react-konva/issues",
   "licenses": "MIT",
   "main": "lib/ReactKonva.js",
   "repository": {
@@ -46,7 +46,7 @@
     "version": "npm run build",
     "postversion": ""
   },
-  "typings": "react-konva.d.ts",
+  "typings": "ag-react-konva.d.ts",
   "files": [
     "README.md",
     "lib",

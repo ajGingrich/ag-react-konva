@@ -1,6 +1,6 @@
-// import Konva from 'konva';
 import 'konva/src/Layer';
 import 'konva/src/shapes/Line';
+// import Konva from 'konva';
 import { applyNodeProps, updatePicture, EVENTS_NAMESPACE } from './makeUpdates';
 
 import invariant from './invariant';
@@ -29,23 +29,9 @@ export function appendInitialChild(parentInstance, child) {
     return;
   }
 
-  child.getLayer = function() {
-    var parent = this.getParent();
-    return parent ? parent.getLayer() : null;
-  }
-
   parentInstance.add(child);
 
-  parentInstance.batchDraw = function() {
-    this.getChildren().each(function(layer) {
-      layer.batchDraw();
-    });
-    return this;
-  };
-
-  console.log(parentInstance, 'parentInstance..')
-
-  updatePicture(parentInstance, 'appendInitialChild');
+  updatePicture(parentInstance);
 }
 
 export function createInstance(type, props, internalInstanceHandle) {
@@ -135,7 +121,7 @@ export function appendChild(parentInstance, child) {
     parentInstance.add(child);
   }
 
-  updatePicture(parentInstance, 'appendChild');
+  updatePicture(parentInstance);
 }
 
 export function appendChildToContainer(parentInstance, child) {
@@ -144,7 +130,7 @@ export function appendChildToContainer(parentInstance, child) {
   } else {
     parentInstance.add(child);
   }
-  updatePicture(parentInstance, 'appendChildToContainer');
+  updatePicture(parentInstance);
 }
 
 export function insertBefore(parentInstance, child, beforeChild) {
@@ -156,7 +142,7 @@ export function insertBefore(parentInstance, child, beforeChild) {
   child.remove();
   parentInstance.add(child);
   child.setZIndex(beforeChild.getZIndex());
-  updatePicture(parentInstance, 'insertBefore');
+  updatePicture(parentInstance);
 }
 
 export function insertInContainerBefore(parentInstance, child, beforeChild) {
@@ -168,19 +154,19 @@ export function insertInContainerBefore(parentInstance, child, beforeChild) {
   child.remove();
   parentInstance.add(child);
   child.setZIndex(beforeChild.getZIndex());
-  updatePicture(parentInstance, 'insertInContainerBefore');
+  updatePicture(parentInstance);
 }
 
 export function removeChild(parentInstance, child) {
   child.destroy();
   child.off(EVENTS_NAMESPACE);
-  updatePicture(parentInstance, 'removechild');
+  updatePicture(parentInstance);
 }
 
 export function removeChildFromContainer(parentInstance, child) {
   child.destroy();
   child.off(EVENTS_NAMESPACE);
-  updatePicture(parentInstance, 'removeChildFromContainer');
+  updatePicture(parentInstance);
 }
 
 export function commitTextUpdate(textInstance, oldText, newText) {
@@ -208,7 +194,7 @@ export function commitUpdate(
 
 export function hideInstance(instance) {
   instance.hide();
-  updatePicture(instance, 'hideInstance');
+  updatePicture(instance);
 }
 
 export function hideTextInstance(textInstance) {
